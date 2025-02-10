@@ -35,7 +35,6 @@ export default function RootLayout({
 
     <html lang="en">
       
-      
        <body>
         <ToastContainer />
         <Providers>
@@ -49,7 +48,6 @@ export default function RootLayout({
 
       </body>
       
-       
     </html>
     </SessionWrapper>
   );

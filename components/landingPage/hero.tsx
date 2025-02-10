@@ -25,11 +25,11 @@ export function Hero() {
         </div>
         <div className="flex-1">
           <Image
-            src="/assets/landing_page_login.png"
+            src="/assets/landingAi.jpg"
             alt="AI Ticketing System"
-            width={700}
+            width={800}
             height={600}
-            className="rounded-lg shadow-lg"
+            className="rounded-lg  mix-blend-multiply "
           />
         </div>
       </div>

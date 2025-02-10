@@ -1,21 +1,18 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { postRequest } from "./utils/axiosHelper";
-
-
-
-import { CredentialInput } from "next-auth/providers/credentials";
+import axios from "axios";
 
 interface LoginResponse {
-    accessToken: string;
-    refreshToken: string;
-    expiresIn: string
-    user: {
-      id: string;
-      name: string;
-      email: string;
-    };
-  }
-  
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
 export const authConfig = {
   providers: [
     CredentialsProvider({
@@ -24,34 +21,40 @@ export const authConfig = {
         username: { label: "Username", type: "text", placeholder: "Enter your username" },
         password: { label: "Password", type: "password", placeholder: "Enter your password" },
       },
-      async authorize(credentials: Record<string, string> | undefined, req): Promise<LoginResponse | null  | any> {
+      async authorize(credentials: Record<string, string> | undefined) {
+        if (!credentials) {
+          throw new Error("Credentials are missing");
+        }
+
+        const loginData = {
+          email: credentials.username,
+          password: credentials.password,
+        };
+
+     
+        console.log("Login Data:", JSON.stringify(loginData, null, 2));
+
         try {
-          if (!credentials) {
-            throw new Error("Credentials are missing");
-          }
-
-          const loginData = {
-            username: credentials.username,
-            password: credentials.password,
-          };
-
-          console.log("loginData", loginData);
-
-          const response:any = await postRequest({
-            url: "/auth/login",
-            data: loginData,
+          // const response: any = await postRequest({
+          //   url: "/auth/login",
+          //   data: loginData,
+          // });
+          const response = await axios.post('http://10.3.41.215:6060/api/user/login', loginData, {
+            headers: {
+            
+              'Accept': 'application/json'
+            }
           });
+          
 
-          console.log("respeyob", response);
+          console.log('serverresp', response)
 
           if (response?.status === 200 && response?.data) {
             return {
-                accessToken: response.data.accessToken,
-                refreshToken: response.data.refreshToken,
-                user: response.data.user
-            }
+              accessToken: response.data.token,
+              user: response.data.user,
+            };
           }
-
           return null;
         } catch (error) {
           console.error("Authorization error:", error);
@@ -60,32 +63,46 @@ export const authConfig = {
       },
     }),
   ],
-  secret: "234234214123wqq3241234",
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/login",
   },
   session: {
     strategy: "jwt",
-    maxAge: 3600
+    maxAge: 3600,
+    updateAge: 60
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        sameSite: "lax",
+      },
+    },
+    callbackUrl: {
+      name: `next-auth.callback-url`,
+      options: {
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        sameSite: "lax",
+      },
+    },
   },
   callbacks: {
-    async jwt({token, user, account}:any) {
-        if (user){
-            token.accessToken = user.accessToken;
-            token.refreshToken = user.refreshToken
-            token.user = user.user
-        }
-        return token;
-        
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.accessToken = user.accessToken;
+        token.user = user.user;
+      }
+      return token;
     },
-    async session({session, token}: any) {
-        session.accesstoken = token.accesstoken;
-        session.refreshToken = token.refreshToken
-        session.user = token.user;
-        return session
-    }
-   
-  }
-
-
+    async session({ session, token }:any) {
+      session.accessToken = token.accessToken; 
+      session.user = token.user;
+      return session;
+    },
+  },
 };

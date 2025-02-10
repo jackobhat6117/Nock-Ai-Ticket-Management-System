@@ -37,14 +37,15 @@ const Page = () => {
       username,
       password,
       redirect: false,
-      callbackUrl: "/dashboard",
+      
     });
 
     if (result?.error) {
       ToastHandler({ status: "error", message: "Error in Authentication" });
     } else {
-      router.push("/dashboard");
+      
       ToastHandler({ status: "success", message: "Authentication Successful" });
+      router.push("/dashboard/noc-site")
     }
     setLoading(false);
   };
@@ -58,7 +59,7 @@ const Page = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 sm:mb-2">
               <div className="px-4 sm:p-0">
                 <img
-                  src="/assets/loginLandingPage.png"
+                  src="/assets/ai-gear.jpg"
                   className="sm:h-[600px] sm:w-[600px] h-full rounded-md bg-gradient-to-r from-black to-white"
                   alt="Login picture"
                 />
@@ -67,7 +68,7 @@ const Page = () => {
                 <div className="flex flex-col justify-center">
                   <div className="flex justify-center sm:mt-7">
                     <h4 className="sm:text-3xl text-center">
-                      Welcome to Nock Ticket Management System
+                      Welcome to Noc Ticket Management System
                     </h4>
                   </div>
                   <div className="flex justify-center sm:mt-4">
@@ -115,23 +116,24 @@ const Page = () => {
                       placeholder="Enter your password"
                       type={isVisible ? "text" : "password"}
                     />
-                    <div className="w-full sm:w-96 flex justify-center items-center">
-                      <Button
-                        color="success"
-                        type="submit"
-                        className="w-full text-white text-lg "
-                        disabled={loading}
-                      >
-                        {loading ? (
-                          <>
-                            <p className="text-lg">Please Wait...</p>{" "}
-                            <Spinner color="default" className="h-7 w-7" />
-                          </>
-                        ) : (
-                          "Login"
-                        )}
-                      </Button>
-                    </div>
+                   <div className="w-full flex items-center justify-center">
+                        <Button
+                          color="success"
+                          type="submit"
+                          className="text-white text-lg w-96 flex items-center justify-center"
+                          disabled={loading}
+                        >
+                          {loading ? (
+                            <div className="flex items-center gap-4">
+                              <p>Please wait</p>
+                              <Spinner size="sm" color="default"/>
+                            </div>
+                          ) : (
+                            "Login"
+                          )}
+                        </Button>
+                      </div>
+
                   </Form>
                 </div>
               </div>

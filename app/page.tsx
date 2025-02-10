@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="w-full py-4 px-6 flex justify-between items-center bg-background">
-      <Link href="/" className="text-2xl font-bold flex gap-2">  <NockAiLogo /> Nock Ai</Link>
+      <Link href="/" className="text-2xl font-bold flex gap-2">  <NockAiLogo /> Noc Ai</Link>
         <Button as={Link} href="/auth/login" color="success" variant="flat" >
           Login
         </Button>

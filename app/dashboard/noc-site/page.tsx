@@ -9,10 +9,10 @@ import { getSession, useSession } from 'next-auth/react'
 
 
 const orderStats = {
-  todayOrders: 4,
-  ordersPending: 0,
-  ordersProcessing: 0,
-  ordersDelivered: 4,
+  OpenTasks : 4,
+  InProgresTasks: 0,
+  CompletedTasks: 0,
+ 
 }
 
 const salesStats = {
@@ -71,23 +71,18 @@ export default function page() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <StatsCard
               icon={<ShoppingCart className="h-5 w-5" />}
-              label="Today Orders"
-              value={orderStats.todayOrders}
-            />
-            <StatsCard
-              icon={<Clock className="h-5 w-5" />}
-              label="Orders Pending"
-              value={orderStats.ordersPending}
+              label="Opened Task"
+              value={orderStats.OpenTasks}
             />
             <StatsCard
               icon={<Package className="h-5 w-5" />}
-              label="Orders Processing"
-              value={orderStats.ordersProcessing}
+              label="Task Processing"
+              value={orderStats.InProgresTasks}
             />
             <StatsCard
               icon={<Check className="h-5 w-5" />}
-              label="Orders Delivered"
-              value={orderStats.ordersDelivered}
+              label="Task Delivered"
+              value={orderStats.CompletedTasks}
             />
           </div>
 

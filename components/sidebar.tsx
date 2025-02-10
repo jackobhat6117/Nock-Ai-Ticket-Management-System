@@ -7,7 +7,7 @@ export function Sidebar() {
       <div className="p-6 text-xl font-bold">Nock-Ai Admin</div>
       <nav className="flex-1 space-y-1 p-4">
         <Link
-          href="/dashboard"
+          href="/dashboard/noc-site"
           className="flex items-center space-x-3 rounded-lg px-3 py-2 text-default-500 hover:bg-default-100"
         >
           <LayoutDashboard className="h-5 w-5" />
@@ -21,14 +21,14 @@ export function Sidebar() {
           <span>Alarm</span>
         </Link>
         <Link
-          href="/customers"
+          href="/incident"
           className="flex items-center space-x-3 rounded-lg px-3 py-2 text-default-500 hover:bg-default-100"
         >
           <Users className="h-5 w-5" />
           <span>Incident Ticket</span>
         </Link>
         <Link
-          href="/orders"
+          href="/workOrder"
           className="flex items-center space-x-3 rounded-lg px-3 py-2 text-default-500 hover:bg-default-100"
         >
           <ShoppingCart className="h-5 w-5" />

@@ -1,55 +1,107 @@
-"use client"
+"use client";
 
-import { Moon, Sun, Bell } from 'lucide-react'
-import { useTheme } from "next-themes"
-import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react"
-import { getSession, signOut, useSession } from 'next-auth/react'
-import { useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { Bell, UserCircle } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+import { useState, useEffect, useMemo } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { 
+  Dropdown, 
+  DropdownTrigger, 
+  DropdownMenu, 
+  DropdownItem, 
+  Button, 
+  Avatar,
+  Tabs,
+  Tab
+} from "@nextui-org/react";
 
 export function Header() {
-  const { setTheme } = useTheme()
-  const loading = useRef(false)
-  const router = useRouter()
-  const  handleSignout = async() => {
-    await signOut()
-  }
-  const{data: session} =  useSession()
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const sessionData = session as any
+  const username = sessionData?.user?.username || "Unknown User";
+
+  
+  const currentDashboard = pathname.includes("noc-it") ? "noc-it" : "noc-site";
+  const [selectedDashboard, setSelectedDashboard] = useState(currentDashboard);
+
+  
   useEffect(() => {
-    if (!session){
-      router.push('/auth/login')
-    }
-    loading.current = true
-  },[session])
+    setSelectedDashboard(currentDashboard);
+  }, [pathname]);
+
+
+  const isDashboardPath = useMemo(() => 
+    pathname === "/dashboard/noc-site" || pathname === "/dashboard/noc-it", 
+    [pathname]
+  );
+
+  const handleSignout = async () => {
+    setLoading(true);
+    await signOut();
+    setLoading(false);
+  };
+
+  const handleDashboardChange = (key: string) => {
+    setSelectedDashboard(key);
+    router.push(`/dashboard/${key}`);
+  };
 
   return (
-    <header className="sticky top-0 border-b bg-white ">
-      <div className="flex h-16 items-center justify-end space-x-4 px-4">
-        <Dropdown>
-          <DropdownTrigger>
-            <Button isIconOnly variant="light">
-              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Theme selection">
-            <DropdownItem key="light" onClick={() => setTheme("light")}>Light</DropdownItem>
-            <DropdownItem key="dark" onClick={() => setTheme("dark")}>Dark</DropdownItem>
-            <DropdownItem key="system" onClick={() => setTheme("system")}>System</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-        <Button isIconOnly variant="light">
-          <Bell className="h-5 w-5" />
-          <span className="sr-only">Notifications</span>
-        </Button>
+    <header className="sticky top-0 border-b bg-white shadow-md z-20">
+      <div className="flex h-16 items-center px-6 justify-between">
+      
+        {isDashboardPath && (
+          <div className="ml-60 mt-5">
+            <Tabs 
+              aria-label="Dashboard Options"
+              selectedKey={selectedDashboard}
+              onSelectionChange={(key) => handleDashboardChange(key as string)}
+              color="primary"
+              variant="underlined"
+              classNames={{
+                cursor: "h-1 w-full bg-primary",
+                tab: "max-w-fit px-6 h-12 text-gray-600 hover:text-primary transition-all",
+                tabContent: "group-data-[selected=true]:text-primary font-semibold"
+              }}
+            >
+              <Tab key="noc-site" title="NOC Site" />
+              <Tab key="noc-it" title="NOC IT" />
+            </Tabs>
+          </div>
+        )}
 
-        <Button variant="solid" onClick = {handleSignout} color='success' className='text-white'>
-         {loading ? 'Signout..': 'Signout'}
-        </Button>
+        {/* Right side controls */}
+        <div className="flex items-center space-x-6 ml-auto">
+          {/* Notifications Button */}
+          <Button isIconOnly variant="light">
+            <Bell className="h-5 w-5" />
+            <span className="sr-only">Notifications</span>
+          </Button>
 
+          {/* Profile Dropdown */}
+          <Dropdown>
+            <DropdownTrigger>
+              <Avatar
+                as="button"
+                size="md"
+                src={session?.user?.image || ""}
+                icon={<UserCircle className="h-6 w-6 text-gray-500" />}
+              />
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem key="profile" className="font-medium">
+                {username}
+              </DropdownItem>
+              <DropdownItem key="signout" onClick={handleSignout} color="danger">
+                {loading ? "Signing out..." : "Sign Out"}
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
       </div>
     </header>
-  )
+  );
 }
-
