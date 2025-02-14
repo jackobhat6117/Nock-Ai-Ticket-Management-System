@@ -35,24 +35,16 @@ export const authConfig = {
         console.log("Login Data:", JSON.stringify(loginData, null, 2));
 
         try {
-          // const response: any = await postRequest({
-          //   url: "/auth/login",
-          //   data: loginData,
-          // });
-          const response = await axios.post('http://10.3.41.215:6060/api/user/login', loginData, {
-            headers: {
-            
-              'Accept': 'application/json'
-            }
+          const response: any = await postRequest({
+            url: "/user/login",
+            data: loginData,
           });
-          
-
           console.log('serverresp', response)
 
-          if (response?.status === 200 && response?.data) {
+          if (response && response?.user) {
             return {
-              accessToken: response.data.token,
-              user: response.data.user,
+              accessToken: response.token,
+              user: response.user,
             };
           }
           return null;

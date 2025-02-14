@@ -3,6 +3,9 @@ import { getRequest, postRequest } from "@/utils/axiosHelper";
 import { Incident } from "@/types/incident";
 import { ApiResponse } from "@/types/apiResponse";
 import { AxiosError } from "axios";
+import { Alarm } from "@/types/alarm";
+import { getSession } from "next-auth/react";
+import { setAuthtoken } from "@/utils/axiosInstance";
 
 interface ApiErrorResponse {
   message: string;
@@ -11,17 +14,27 @@ interface ApiErrorResponse {
 
 type AxiosErrorResponse = AxiosError<ApiErrorResponse>;
 
-export const useIncidentServices = () => {
-    const [data, setData] = useState<Incident[] | null>(null);
+export const useAlarmService = () => {
+    const [data, setData] = useState<Alarm[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-        const getIncidents = async () => {
+        const getAlarm = async () => {
             setLoading(true);
             setError(null);
             try {
-            const response = await getRequest<ApiResponse<Incident[]>>({ url: "/incidents" });
+                const session: any = await getSession()
+                const token = session?.accessToken
+                if (token) {
+                    setAuthtoken(token)
+                }
+                else {
+                    setAuthtoken(null)
+                }
+            const response = await getRequest<ApiResponse<Alarm[]>>({ url: "/alarm/allAlarm"});
+            console.log("alarm API Response:", response.data); 
             setData(response.data)
+            return response
             } catch (err) {
             const axiosError = err as AxiosErrorResponse;
             setError(axiosError.response?.data?.message || axiosError.message);
@@ -30,11 +43,11 @@ export const useIncidentServices = () => {
             }
         };
 
-        const createIncidents = async(incidentData:any) => {
+        const createAlarm = async(incidentData:any) => {
                 setLoading(true)
                 setError(null);
                 try {
-                    const response  = await postRequest<ApiResponse<Incident[]>>({url: "/createIncident",data: incidentData})
+                    const response  = await postRequest<ApiResponse<Alarm[]>>({url: "/createIncident",data: incidentData})
                     setData(response.data)
                     return response
 
@@ -47,5 +60,5 @@ export const useIncidentServices = () => {
 
         }
 
-  return { data, loading, error, getIncidents, createIncidents };
+  return { data, loading, error, getAlarm, createAlarm };
 };

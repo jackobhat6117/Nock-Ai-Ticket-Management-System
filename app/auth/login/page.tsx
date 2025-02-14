@@ -39,13 +39,14 @@ const Page = () => {
       redirect: false,
       
     });
+    console.log('resutl', result)
 
     if (result?.error) {
       ToastHandler({ status: "error", message: "Error in Authentication" });
     } else {
       
       ToastHandler({ status: "success", message: "Authentication Successful" });
-      router.push("/dashboard/noc-site")
+      router.push("/dashboard/noc-it")
     }
     setLoading(false);
   };

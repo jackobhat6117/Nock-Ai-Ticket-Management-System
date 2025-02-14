@@ -2,14 +2,14 @@
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Card, CardBody, CardHeader } from "@nextui-org/react"
-import { WeeklySales } from "@/types/dashboard"
+// import { WeeklySales } from "@/types/dashboard"
 
 
-interface WeeklyChartProps {
-  data: WeeklySales[]
-}
+// interface WeeklyChartProps {
+//   data: WeeklySales[]
+// }
 
-export function WeeklyChart({ data }: WeeklyChartProps) {
+export function WeeklyChart({ data }: any) {
   return (
     <Card>
       <CardHeader className="font-bold text-lg">Weekly Sales</CardHeader>

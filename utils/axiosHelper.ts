@@ -18,19 +18,22 @@ interface FormDataParams {
 }
 
 
+
 export const getRequest = async <T>({ url, params = {} }: RequestParams): Promise<T> => {
   try {
+   
     const res = await AxiosInstance.get<T>(url, { params });
+    console.log('res', res)
     return res.data;
   } catch (error) {
     handleApiError(error);
-    throw error
+    throw error;
   }
 };
-
 export const postRequest = async <T>({ url, data = {}, params = {} }: RequestParams & DataParams): Promise<T> => {
   try {
     const res = await AxiosInstance.post<T>(url, data, { params });
+    console.log('thisres', res)
     return res.data;
   } catch (error) {
     handleApiError(error);

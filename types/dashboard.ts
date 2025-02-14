@@ -5,23 +5,24 @@ export interface OrderStats {
     ordersDelivered: number
   }
   
-  export interface SalesStats {
-    amount: number
-    cash: number
-    card: number
-    credit: number
+  export interface IncidentStatus {
+    ticketStatus: "opent" | "inprogress" | "closed"
+    count: number
+   
   }
   
-  export interface WeeklySales {
-    date: string
-    sales: number
-    orders: number
+  export interface IncidentDepartment {
+    department: "mpesa-dxl" | "bigdata" | "tibco"
+    open: number
+    inprogress: number
+    closed: number
   }
   
-  export interface ProductSale {
-    name: string
-    value: number
-    color: string
+  export interface IncidentSeverity {
+    severity: "p0" | "p1" | "p2" | "p3" | "p4"
+    open: number
+    inprogress: number
+    closed: number
   }
   
   

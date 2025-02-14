@@ -21,7 +21,11 @@ export function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const sessionData = session as any
-  const username = sessionData?.user?.username || "Unknown User";
+  console.log('sessionheader', session)
+  const firstName = sessionData?.user?.firstName  || "Unknown User";
+  const lastName = sessionData?.user?.lastName
+
+  const userName = firstName + " " + lastName
 
   
   const currentDashboard = pathname.includes("noc-it") ? "noc-it" : "noc-site";
@@ -67,8 +71,8 @@ export function Header() {
                 tabContent: "group-data-[selected=true]:text-primary font-semibold"
               }}
             >
-              <Tab key="noc-site" title="NOC Site" />
               <Tab key="noc-it" title="NOC IT" />
+              <Tab key="noc-site" title="NOC Site" />
             </Tabs>
           </div>
         )}
@@ -93,7 +97,7 @@ export function Header() {
             </DropdownTrigger>
             <DropdownMenu>
               <DropdownItem key="profile" className="font-medium">
-                {username}
+                {userName}
               </DropdownItem>
               <DropdownItem key="signout" onClick={handleSignout} color="danger">
                 {loading ? "Signing out..." : "Sign Out"}

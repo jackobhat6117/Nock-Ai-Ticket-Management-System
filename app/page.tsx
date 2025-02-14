@@ -1,4 +1,4 @@
-import { AIDemo } from "@/components/landingPage/ai-demo"
+import { AIChat } from "@/components/landingPage/ai-demo"
 import { CTASection } from "@/components/landingPage/cat-section"
 import { Features } from "@/components/landingPage/features"
 import { Hero } from "@/components/landingPage/hero"
@@ -20,9 +20,9 @@ export default function Home() {
       <main className="flex-grow">
         <Hero />
         <Features />
-        <AIDemo />
-        <Testimonials />
-        <CTASection />
+        <AIChat />
+        {/* <Testimonials />
+        <CTASection /> */}
       </main>
 
       <footer className="w-full py-6 px-6 bg-background text-center">
