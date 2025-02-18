@@ -15,9 +15,10 @@ export interface SiteOutage {
   
   export interface MapMarker {
     id: string
+    siteid: string
     lat: number
     lng: number
-    status: "active" | "inactive"
+    status: "active" | "inactive" | any
     type: "cell" | "site"
     name: string
   }

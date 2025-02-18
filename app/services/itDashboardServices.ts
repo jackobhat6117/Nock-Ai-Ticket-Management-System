@@ -52,7 +52,7 @@ export const useIncidetTicketDashbaord = () => {
         },
       ];
 
-      // Fetch all endpoints concurrently
+      
       setLoading(true);
       const results = await Promise.allSettled(
         endpoints.map((endpoint) =>
@@ -60,7 +60,7 @@ export const useIncidetTicketDashbaord = () => {
         )
       );
 
-      // Process the results
+     
       const dashboardData: {
         incidentsPerStatus?: IncidentStatus[];
         incidentsPerDepartment?: IncidentDepartment[];

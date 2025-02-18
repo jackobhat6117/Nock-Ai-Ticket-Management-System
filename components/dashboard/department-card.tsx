@@ -19,8 +19,8 @@ export function DepartmentCard({ value = [], loading }: DepartmentCardProps) {
         {loading ? <Skeleton className="h-6 w-3/4 rounded-lg" /> : capitalizeFirstLetter(department?.department || "N/A")}
       </CardHeader>
       <CardBody>
-        <div className="text-2xl font-bold mb-4">
-          {loading ? <Skeleton className="h-8 w-1/2 rounded-lg" /> : 8}
+        <div className="text-lg font-bold text-gray-500 mb-4">
+          {loading ? <Skeleton className="h-8 w-1/2 rounded-lg" /> : `Total Incident Ticket : ${department ? department?.open + department?.inprogress + department?.closed : '0'}`}
         </div>
         <div className="grid grid-cols-3 gap-2 text-sm">
           {["Open", "Inprogress", "Closed"].map((status, i) => (
@@ -37,6 +37,7 @@ export function DepartmentCard({ value = [], loading }: DepartmentCardProps) {
               )}
             </div>
           ))}
+          
         </div>
       </CardBody>
     </Card>

@@ -53,7 +53,7 @@ const getIncidents = async () => {
     setError(null);
     try {
       const response = await postRequest<ApiResponse<Incident[]>>({
-        url: "/createIncident",
+        url: "/incidentTicket/addIncidentTicket",
         data: incidentData,
       });
       setData(response.data);

@@ -9,24 +9,17 @@ import { ShoppingCart, Clock, Package, Check } from 'lucide-react'
 import { getSession, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import { useFieldArray } from 'react-hook-form'
-import { WeeklyChart } from '@/components/dashboard/weekly-chart'
+import { IncidentStatusChart } from '@/components/dashboard/incidentStatus-chart'
 
 
 
-const weeklySalesData = [
-  { date: "Mon", sales: 1459.5, orders: 4 },
-  { date: "Tue", sales: 1459.6, orders: 3 },
-  { date: "Wed", sales: 1460.0, orders: 5 },
-  { date: "Thu", sales: 1460.2, orders: 4 },
-  { date: "Fri", sales: 1460.5, orders: 6 },
-]
 
-const productSalesData = [
-  { name: "Green Leaf Lettuce", value: 45, color: "#10b981" },
-  { name: "Huggies Diaper-Reg.Small", value: 25, color: "#3b82f6" },
-  { name: "Clementine", value: 20, color: "#f97316" },
-  { name: "Blueberry", value: 10, color: "#6366f1" },
-]
+const IncidentStatusChartdata = [
+  { category: "Mpesa-dxl", Open: 3, Inprogress: 1, Closed: 7 },
+  { category: "Bigdata", Open: 4, Inprogress: 1, Closed: 9 },
+  { category: "Tibco", Open: 3, Inprogress: 1, Closed: 4 },
+];
+
 
 export default function page() {
   const {data: session} = useSession()
@@ -66,7 +59,7 @@ export default function page() {
            
 
           <div className="grid gap-6 md:grid-cols-2">
-            <WeeklyChart data={weeklySalesData} />
+            <IncidentStatusChart data={IncidentStatusChartdata} />
             <SeverityChart data={data?.incidentsPerSeverity} loading = {loading}/>
           </div>
         </div>

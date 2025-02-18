@@ -26,8 +26,19 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { Plus, Search, FileDown, FileUp, Edit, Eye, History } from "lucide-react";
+import {
+  Plus,
+  Search,
+  FileDown,
+  FileUp,
+  Edit,
+  Eye,
+  History,
+} from "lucide-react";
 import type { Incident } from "@/types/incident";
+import { CgProfile } from "react-icons/cg";
+import { useIncidentServices } from "@/app/services/incidentServices";
+import { ToastHandler } from "@/components/common/toast";
 
 const severityColorMap: Record<string, ChipProps["color"]> = {
   p1: "danger",
@@ -62,28 +73,43 @@ const INITIAL_VISIBLE_COLUMNS = [
   "actions",
 ];
 
-export function IncidentTable({ incidents, loading, error }: { incidents: Incident[], loading: boolean, error: string | null }) {
+export function IncidentTable({
+  incidents,
+  loading,
+  error,
+}: {
+  incidents: Incident[];
+  loading: boolean;
+  error: string | null;
+}) {
   const [filterValue, setFilterValue] = useState("");
+  const { getIncidents, createIncidents } = useIncidentServices()
   const [visibleColumns] = useState(new Set(INITIAL_VISIBLE_COLUMNS));
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "incidentCreationTime",
     direction: "descending",
   });
+  
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     severity: "p1",
-    assignedPerson: "",
+    incidentCreationTime: new Date().toISOString(),
     alarmDescription: "",
+    note: "",
     department: "",
-    alarmStatus: "open",
+    alarmStartTime: new Date().toISOString(),
+    alarmStatus: "",
   });
 
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = useMemo(() => {
-    return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid)
+    );
   }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
@@ -92,10 +118,16 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
     if (hasSearchFilter) {
       filteredIncidents = filteredIncidents.filter(
         (incident) =>
-          incident.incidentId.toLowerCase().includes(filterValue.toLowerCase()) ||
-          incident.alarmDescription.toLowerCase().includes(filterValue.toLowerCase()) ||
-          incident.assignedPerson.toLowerCase().includes(filterValue.toLowerCase()) ||
-          incident.department.toLowerCase().includes(filterValue.toLowerCase()),
+          incident.incidentId
+            .toLowerCase()
+            .includes(filterValue.toLowerCase()) ||
+          incident.alarmDescription
+            .toLowerCase()
+            .includes(filterValue.toLowerCase()) ||
+          incident.assignedPerson
+            .toLowerCase()
+            .includes(filterValue.toLowerCase()) ||
+          incident.department.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -125,18 +157,27 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
     switch (columnKey) {
       case "severity":
         return (
-          <Chip className="capitalize" color={severityColorMap[incident.severity]} size="sm" variant="flat">
+          <Chip
+            className="capitalize"
+            color={severityColorMap[incident.severity]}
+            size="sm"
+            variant="flat"
+          >
             {incident.severity.toUpperCase()}
           </Chip>
         );
       case "assignedPerson":
         return (
-          <User
-            name={incident.assignedPerson}
-            avatarProps={{
-              src: `https://i.pravatar.cc/150?u=${incident.assignedPerson.replace(" ", "")}`,
-            }}
-          />
+          <div className="flex gap-3">
+            <CgProfile />
+            <p>{incident.assignedPerson}</p>
+          </div>
+          // <User
+          //   name={incident.assignedPerson}
+          //   avatarProps={{
+          //     src: `https://i.pravatar.cc/150?u=${incident.assignedPerson.replace(" ", "")}`,
+          //   }}
+          // />
         );
       case "incidentCreationTime":
         return formatDate(incident.incidentCreationTime);
@@ -162,12 +203,19 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
               </div>
             }
           >
-            <span className="cursor-help truncate max-w-xs inline-block">{incident.alarmDescription}</span>
+            <span className="cursor-help truncate max-w-xs inline-block">
+              {incident.alarmDescription}
+            </span>
           </Tooltip>
         );
       case "alarmStatus":
         return (
-          <Chip className="capitalize" color={statusColorMap[incident.alarmStatus]} size="sm" variant="dot">
+          <Chip
+            className="capitalize"
+            color={statusColorMap[incident.alarmStatus]}
+            size="sm"
+            variant="dot"
+          >
             {incident.alarmStatus.toUpperCase()}
           </Chip>
         );
@@ -205,10 +253,20 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
     }
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async () => {
     // Handle form submission logic here
-    console.log("Form Data:", formData);
-    setIsModalOpen(false); // Close the modal after submission
+    setIsSubmitting(true)
+    const response = await createIncidents(formData)
+    setIsSubmitting(false)
+    console.log("Form Data: res", response);
+    setIsModalOpen(false); 
+    if (response){
+      ToastHandler({ status: "success", message: "Incident Created Successfull" });
+    }
+    else {
+      ToastHandler({ status: "danger", message: "Incident Created Failed" });
+    }
+    
   };
 
   const topContent = useMemo(() => {
@@ -225,10 +283,16 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <Button variant="flat" startContent={<FileDown className="h-4 w-4" />}>
+            <Button
+              variant="flat"
+              startContent={<FileDown className="h-4 w-4" />}
+            >
               Export
             </Button>
-            <Button variant="flat" startContent={<FileUp className="h-4 w-4" />}>
+            <Button
+              variant="flat"
+              startContent={<FileUp className="h-4 w-4" />}
+            >
               Import
             </Button>
             <Button
@@ -258,13 +322,19 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
           total={pages}
           onChange={setPage}
         />
-        <span className="text-small text-default-400">{filteredItems?.length} incidents</span>
+        <span className="text-small text-default-400">
+          {filteredItems?.length} incidents
+        </span>
       </div>
     );
   }, [filteredItems?.length, page, pages]);
 
   if (error) {
-    return <div className="text-danger flex justify-center items-center font-extrabold text-3xl pt-28">Error: {error}</div>;
+    return (
+      <div className="text-danger flex justify-center items-center font-extrabold text-3xl pt-28">
+        Error: {error}
+      </div>
+    );
   }
 
   return (
@@ -294,20 +364,16 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
           )}
         </TableHeader>
         <TableBody
+          isLoading = {loading}
           items={items}
-          emptyContent={
-            loading ? (
-              <div className="flex justify-center items-center h-32">
-                <Spinner label="Loading..." color="success" />
-              </div>
-            ) : (
-              "No incidents found"
-            )
-          }
+          loadingContent={<Spinner label="Loading..." color="success"/>}
+          emptyContent={"No incidents found"}
         >
           {(item) => (
             <TableRow key={item.incidentId}>
-              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
             </TableRow>
           )}
         </TableBody>
@@ -316,13 +382,17 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
       {/* Modal for Creating/Editing Incidents */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">Create Incident</ModalHeader>
+          <ModalHeader className="flex flex-col gap-1">
+            Create Incident
+          </ModalHeader>
           <ModalBody>
             <Select
               label="Severity"
               placeholder="Select severity"
               value={formData.severity}
-              onChange={(e) => setFormData({ ...formData, severity: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, severity: e.target.value })
+              }
             >
               <SelectItem key="p1" value="p1">
                 P1
@@ -334,29 +404,48 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
                 P3
               </SelectItem>
             </Select>
-            <Input
-              label="Assigned Person"
-              placeholder="Enter assigned person"
-              value={formData.assignedPerson}
-              onChange={(e) => setFormData({ ...formData, assignedPerson: e.target.value })}
-            />
+           
             <Textarea
               label="Description"
               placeholder="Enter alarm description"
               value={formData.alarmDescription}
-              onChange={(e) => setFormData({ ...formData, alarmDescription: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, alarmDescription: e.target.value })
+              }
             />
-            <Input
+             <Select
               label="Department"
-              placeholder="Enter department"
+              placeholder="Select Department"
               value={formData.department}
-              onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, department: e.target.value })
+              }
+            >
+              <SelectItem key="bigData" value="bigData">
+                Big Data
+              </SelectItem>
+              <SelectItem key="mpesa-dxl" value="mpesa-dxl">
+                Mpesa-dxl
+              </SelectItem>
+              <SelectItem key="tibco" value="tibco">
+                Tibco
+              </SelectItem>
+            </Select>
+            <Input
+              label="Note"
+              placeholder="Enter your note"
+              value={formData.note}
+              onChange={(e) =>
+                setFormData({ ...formData, note: e.target.value })
+              }
             />
             <Select
               label="Status"
               placeholder="Select status"
               value={formData.alarmStatus}
-              onChange={(e) => setFormData({ ...formData, alarmStatus: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, alarmStatus: e.target.value })
+              }
             >
               <SelectItem key="open" value="open">
                 Open
@@ -367,11 +456,15 @@ export function IncidentTable({ incidents, loading, error }: { incidents: Incide
             </Select>
           </ModalBody>
           <ModalFooter>
-            <Button color="danger" variant="light" onPress={() => setIsModalOpen(false)}>
+            <Button
+              color="danger"
+              variant="light"
+              onPress={() => setIsModalOpen(false)}
+            >
               Close
             </Button>
             <Button color="success" onPress={handleFormSubmit}>
-              Submit
+             {isSubmitting ? "Submitting" : "Submit"}
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -20,6 +20,7 @@ import {
 } from "@nextui-org/react"
 import { Plus, Search, FileDown, FileUp, Edit, Eye, History } from "lucide-react"
 import { Alarm } from "@/types/alarm"
+import { CgProfile } from "react-icons/cg";
 
 const severityColorMap: Record<string, ChipProps["color"]> = {
   p1: "danger",
@@ -117,12 +118,17 @@ export function AlarmTable({ alarms, loading, error }: { alarms: Alarm[], loadin
         )
       case "assignedPerson":
         return (
-          <User
-            name={alarm.assignedPerson}
-            avatarProps={{
-              src: `https://i.pravatar.cc/150?u=${alarm.assignedPerson.replace(" ", "")}`,
-            }}
-          />
+            <div className="flex gap-3">
+                <CgProfile />
+                <p>{alarm.assignedPerson}</p>
+
+                </div>
+        //   <User
+        //     name={alarm.assignedPerson}
+        //     avatarProps={{
+        //       src: `https://i.pravatar.cc/150?u=${alarm.assignedPerson.replace(" ", "")}`,
+        //     }}
+        //   />
         )
       case "alarmCreationTime":
         return formatDate(alarm.alarmStartDate)
@@ -253,16 +259,10 @@ export function AlarmTable({ alarms, loading, error }: { alarms: Alarm[], loadin
         )}
       </TableHeader>
       <TableBody
+        isLoading = {loading}
         items={items}
-        emptyContent={
-          loading ? (
-            <div className="flex justify-center items-center h-32">
-              <Spinner label="Loading..." color="success" />
-            </div>
-          ) : (
-            "No Alarms found"
-          )
-        }
+        loadingContent={<Spinner label="Loading..." color="success"/>}
+        emptyContent={"No Alarms found"}
       >
         {(item) => (
           <TableRow key={item.ticketId || item.ticketId || Math.random()}>
