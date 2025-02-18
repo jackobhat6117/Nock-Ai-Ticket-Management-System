@@ -1,24 +1,20 @@
 'use client'
 import MainLayout from '@/components/common/main'
-import { IncidentTable } from '@/components/ui/tables/incident-table'
 import React, { useEffect, useState } from 'react'
-import { useIncidentServices } from '../services/incidentServices'
-import { Incident } from '@/types/incident'
-import { ApiResponse } from '@/types/apiResponse'
 import { Alarm } from '@/types/alarm'
 import { AlarmTable } from '@/components/ui/tables/alarm-table'
 import { useAlarmService } from '../services/alarmServices'
 
 const Page = () => {
   const { loading, error, getAlarm } = useAlarmService()
-  const [alarms, setAlarms] = useState<Alarm[]>([])
+  const [alarms, setAlarms] = useState<Alarm[] | any>([] )
 
   console.log('alarmsPage', alarms.flat())
 
   const getAlarmData = async () => {
     try {
-      const response:any = await getAlarm()
-      setAlarms(response.flat())
+      const response = await getAlarm()
+      setAlarms(response)
     } catch (err) {
       console.error('Failed to fetch incidents:', err)
     }

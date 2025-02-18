@@ -41,7 +41,7 @@ import {
 } from "recharts";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 
-export function IncidentStatusChart({ data }: any) {
+export function IncidentStatusChart({ data  }: any) {
   return (
     <Card>
       <CardHeader className="font-bold text-lg">Incident Status Overview</CardHeader>

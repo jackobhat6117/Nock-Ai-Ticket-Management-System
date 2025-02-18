@@ -8,7 +8,7 @@ interface MainLayoutProps {
     
 }
 
-export default function MainLayout({children, pageTitle}: MainLayoutProps) {
+export default function MainLayout({children}: MainLayoutProps) {
     return (
         <div>
 

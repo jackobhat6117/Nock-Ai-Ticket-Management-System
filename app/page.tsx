@@ -1,11 +1,11 @@
 import { AIChat } from "@/components/landingPage/ai-demo"
-import { CTASection } from "@/components/landingPage/cat-section"
+
 import { Features } from "@/components/landingPage/features"
 import { Hero } from "@/components/landingPage/hero"
-import { Testimonials } from "@/components/landingPage/testimonials"
+
 import { NockAiLogo } from "@/components/ui/mainHeader"
 import { Button, Link } from "@nextui-org/react"
-import { ArrowRight } from 'lucide-react'
+
 
 export default function Home() {
   return (

@@ -102,7 +102,7 @@ export function IncidentTable({
     department: "",
     alarmStartTime: new Date().toISOString(),
     alarmStatus: "",
-  });
+  } as any);
 
   const hasSearchFilter = Boolean(filterValue);
 

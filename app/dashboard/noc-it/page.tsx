@@ -4,11 +4,9 @@ import MainLayout from '@/components/common/main'
 import { SeverityChart } from '@/components/dashboard/serverityChart'
 import { DepartmentCard } from '@/components/dashboard/department-card'
 import { StatusCard } from '@/components/dashboard/status-card'
-
-import { ShoppingCart, Clock, Package, Check } from 'lucide-react'
-import { getSession, useSession } from 'next-auth/react'
+import { ShoppingCart} from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
-import { useFieldArray } from 'react-hook-form'
 import { IncidentStatusChart } from '@/components/dashboard/incidentStatus-chart'
 
 
@@ -21,21 +19,16 @@ const IncidentStatusChartdata = [
 ];
 
 
-export default function page() {
-  const {data: session} = useSession()
- 
-  console.log('session', session)
+export default function NocIt() {
 
-  const { data, loading, error, fetchDashboardData } = useIncidetTicketDashbaord();
+  const { data, loading,  fetchDashboardData } = useIncidetTicketDashbaord();
 
-  
- 
 
   useEffect(() => {
     fetchDashboardData()
   },[])
 
-  console.log('dashboarddata', data)
+ 
   
   return (
     <MainLayout pageTitle='Dashboard' >

@@ -4,15 +4,15 @@ import { IncidentTable } from '@/components/ui/tables/incident-table'
 import React, { useEffect, useState } from 'react'
 import { useIncidentServices } from '../services/incidentServices'
 import { Incident } from '@/types/incident'
-import { ApiResponse } from '@/types/apiResponse'
+
 
 const Page = () => {
   const { loading, error, getIncidents } = useIncidentServices()
-  const [incidents, setIncidents] = useState<Incident[]>([])
+  const [incidents, setIncidents] = useState<Incident[] | any>([])
 
   const getIncidentData = async () => {
     try {
-      const response:any = await getIncidents()
+      const response = await getIncidents()
       setIncidents(response)
     } catch (err) {
       console.error('Failed to fetch incidents:', err)

@@ -7,8 +7,8 @@ import { OutageMap } from "@/components/dashboard/outage-map";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-export default function page() {
-  const [session, setSession] = useState(null);
+export default function NocSite() {
+ 
   const {data, loading, getSiteMapData} = useSiteMapService()
 
    useEffect(() => {
@@ -16,17 +16,9 @@ export default function page() {
 
    },[])
    
-   console.log('sitedataaa', data)
+  
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      const sessionData:any = await getSession();
-      console.log("Session:", sessionData);
-      setSession(sessionData);
-    };
-
-    fetchSession();
-  }, []);
+ 
   return (
     <MainLayout pageTitle="Dashboard">
       <div className="flex min-h-screen">

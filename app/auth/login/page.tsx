@@ -1,7 +1,6 @@
 "use client";
 import MainHeader from "@/components/ui/mainHeader";
 import React, { useState } from "react";
-import Image from "next/image";
 import { Form, Input, Button, Spinner } from "@nextui-org/react";
 import {
   EyeFilledIcon,
@@ -10,16 +9,9 @@ import {
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ToastHandler } from "@/components/common/toast";
-import {
-  FaceIcon,
-  ImageIcon,
-  SunIcon,
-  ArrowRightIcon,
-} from "@radix-ui/react-icons";
-import MinimalLayout from "@/components/layouts/MinimalLayout";
+
 
 const Page = () => {
-  const [action, setAction] = useState<string | null>(null);
   const [isVisible, setIsVisible] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -80,7 +72,7 @@ const Page = () => {
                   <Form
                     className="w-full flex flex-col space-y-10 justify-center mt-20 items-center"
                     validationBehavior="native"
-                    onReset={() => setAction("reset")}
+                    // onReset={() => setAction("reset")}
                     onSubmit={onSubmit}
                   >
                     <Input
