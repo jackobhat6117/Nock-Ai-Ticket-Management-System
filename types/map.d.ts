@@ -21,6 +21,9 @@ export interface SiteOutage {
     status: "active" | "inactive" | any
     type: "cell" | "site"
     name: string
+    total_active_customers: string,
+    total_revenue:string
+
   }
   
   

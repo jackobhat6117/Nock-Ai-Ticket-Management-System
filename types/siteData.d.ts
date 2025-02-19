@@ -20,6 +20,8 @@ export interface TotalSiteStatusMap {
         region: string,
         locationLat: string,
         locationLong: string
+        total_active_customers: string,
+        total_revenue: string
 }
 
 export interface TotalStatusTable {
@@ -27,4 +29,6 @@ export interface TotalStatusTable {
         site_up: string,
         site_down: string,
         total_sites: string
+        total_active_customers: string,
+        total_revenue: string
 }

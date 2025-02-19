@@ -108,6 +108,9 @@ export function OutageMap({ data, loading }: siteMapProps) {
               lat: Number(marker.locationLat),
               lng: Number(marker.locationLong),
               status: marker.sitedownflag === "0" ? "active" : "inactive",
+              active_customer: marker.total_active_customers,
+              total_revenue: marker.total_revenue
+
             
             })}
             title={marker.region} // Tooltip showing the region name
@@ -177,6 +180,14 @@ export function OutageMap({ data, loading }: siteMapProps) {
                 <p className="text-sm text-default-500">
                   Location: {selectedMarker.lat.toFixed(4)}, {selectedMarker.lng.toFixed(4)}
                 </p>
+                <p className="text-sm text-default-500">
+                  Active Customer: {selectedMarker.active_customer}
+                </p>
+
+                <p className="text-sm text-default-500">
+                  Total Revenue: {selectedMarker.total_revenue}
+                </p>
+                
               </div>
             )}
           </div>
@@ -194,13 +205,15 @@ export function OutageMap({ data, loading }: siteMapProps) {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full">
+              <table className="min-w-full w-96">
                 <thead>
                   <tr>
                     <th className="px-4 py-2">Region</th>
                     <th className="px-4 py-2">Active</th>
                     <th className="px-4 py-2">Inactive</th>
                     <th className="px-4 py-2">Total</th>
+                    <th className="px-4 py-2">Active Customer</th>
+                    <th className="px-4 py-2">Revenu Per Region</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -212,6 +225,9 @@ export function OutageMap({ data, loading }: siteMapProps) {
                       <td className="px-4 py-2">
                         {item.site_up}/{item.total_sites}
                       </td>
+                      <td className="px-4 py-2 text-blue-600">{item.total_active_customers}</td>
+                      <td className="px-4 py-2 text-blue-600">{item.total_revenue} Br.</td>
+                      
                     </tr>
                   ))}
                 </tbody>
