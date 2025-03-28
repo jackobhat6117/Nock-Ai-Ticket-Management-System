@@ -61,7 +61,7 @@ const Page = () => {
                 <div className="flex flex-col justify-center">
                   <div className="flex justify-center sm:mt-7">
                     <h4 className="sm:text-3xl text-center">
-                      Welcome to Noc Ticket Management System
+                      Welcome to Noc AI Incident Management
                     </h4>
                   </div>
                   <div className="flex justify-center sm:mt-4">

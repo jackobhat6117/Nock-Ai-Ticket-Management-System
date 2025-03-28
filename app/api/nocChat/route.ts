@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const { question } = await request.json();
 
     // Call the external API
-    const response = await fetch("http://10.3.41.216:8000/generate-query/", {
+    const response = await fetch("http://10.3.141.203:8000/pod-status/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

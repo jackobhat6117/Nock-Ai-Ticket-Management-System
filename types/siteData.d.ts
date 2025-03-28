@@ -29,6 +29,6 @@ export interface TotalStatusTable {
         site_up: string,
         site_down: string,
         total_sites: string
-        total_active_customers: string,
+        total_active_subscribers: string,
         total_revenue: string
 }

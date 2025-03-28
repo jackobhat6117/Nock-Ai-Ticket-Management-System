@@ -97,28 +97,29 @@ export function OutageMap({ data, loading }: siteMapProps) {
         onUnmount={onUnmount}
         mapTypeId={mapType}
       >
-        {data?.totalSitesStatusMap?.map((marker: TotalSiteStatusMap, index:number) => (
+        {data?.totalSitesStatusMap?.map((marker: TotalSiteStatusMap, index: number) => (
           <Marker
             key={index}
             position={{ lat: Number(marker.locationLat), lng: Number(marker.locationLong) }}
             icon={markerIcons[marker.sitedownflag === "0" ? "active" : "inactive"]}
-            onClick={() => setSelectedMarker({
-              siteid: marker.siteid,
-              region: marker.region,
-              lat: Number(marker.locationLat),
-              lng: Number(marker.locationLong),
-              status: marker.sitedownflag === "0" ? "active" : "inactive",
-              active_customer: marker.total_active_customers,
-              total_revenue: marker.total_revenue
-
-            
-            })}
+            onClick={() =>
+              setSelectedMarker({
+                siteid: marker.siteid,
+                region: marker.region,
+                lat: Number(marker.locationLat),
+                lng: Number(marker.locationLong),
+                status: marker.sitedownflag === "0" ? "active" : "inactive",
+                active_customer: marker.total_active_customers,
+                total_revenue: marker.total_revenue,
+              })
+            }
             title={marker.region} // Tooltip showing the region name
           />
         ))}
       </GoogleMap>
 
-      <div className="absolute top-20 left-4 z-10 flex gap-2">
+      {/* Map Type Dropdown */}
+      <div className="absolute top-10 left-4 z-10 flex gap-2 mt-10">
         <Dropdown>
           <DropdownTrigger>
             <Button
@@ -138,7 +139,8 @@ export function OutageMap({ data, loading }: siteMapProps) {
         </Dropdown>
       </div>
 
-      <Card className="absolute top-4 right-4 z-10 w-80">
+      {/* Site Status Overview Card */}
+      <Card className="absolute top-4 right-4 z-10 w-80 max-w-[90%] sm:max-w-none">
         <CardBody>
           <h3 className="text-lg font-bold mb-2">Site Status Overview</h3>
           <div className="space-y-4">
@@ -183,18 +185,17 @@ export function OutageMap({ data, loading }: siteMapProps) {
                 <p className="text-sm text-default-500">
                   Active Customer: {selectedMarker.active_customer}
                 </p>
-
                 <p className="text-sm text-default-500">
-                  Total Revenue: {selectedMarker.total_revenue}
+                  Total Revenue: {selectedMarker.total_revenue} Br.
                 </p>
-                
               </div>
             )}
           </div>
         </CardBody>
       </Card>
 
-      <Card className="absolute bottom-4 left-4 z-10 h-96">
+      {/* Site Statistics Card */}
+      <Card className="absolute bottom-4 left-4 z-10 w-[90%] sm:w-[42%] h-96">
         <CardBody>
           <h3 className="text-lg font-bold mb-2">Site Statistics</h3>
           {loading ? (
@@ -205,7 +206,7 @@ export function OutageMap({ data, loading }: siteMapProps) {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full w-96">
+              <table className="min-w-full">
                 <thead>
                   <tr>
                     <th className="px-4 py-2">Region</th>
@@ -213,7 +214,7 @@ export function OutageMap({ data, loading }: siteMapProps) {
                     <th className="px-4 py-2">Inactive</th>
                     <th className="px-4 py-2">Total</th>
                     <th className="px-4 py-2">Active Customer</th>
-                    <th className="px-4 py-2">Revenu Per Region</th>
+                    <th className="px-4 py-2">Revenue Per Region</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -225,9 +226,8 @@ export function OutageMap({ data, loading }: siteMapProps) {
                       <td className="px-4 py-2">
                         {item.site_up}/{item.total_sites}
                       </td>
-                      <td className="px-4 py-2 text-blue-600">{item.total_active_customers}</td>
-                      <td className="px-4 py-2 text-blue-600">{item.total_revenue} Br.</td>
-                      
+                      <td className="px-4 py-2 text-blue-600">{item.total_active_subscribers}</td>
+                      <td className="px-4 py-2 text-blue-600">{item.total_revenue} Birr.</td>
                     </tr>
                   ))}
                 </tbody>
@@ -237,7 +237,8 @@ export function OutageMap({ data, loading }: siteMapProps) {
         </CardBody>
       </Card>
 
-      <div className="absolute bottom-4 right-4 z-10 w-[500px]">
+      {/* Region Trend Chart */}
+      <div className="absolute bottom-4 right-4 z-10 w-[90%] sm:w-[500px]">
         <RegionTrendChart />
       </div>
     </div>
