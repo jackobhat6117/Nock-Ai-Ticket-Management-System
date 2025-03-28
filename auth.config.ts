@@ -1,6 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { postRequest } from "./utils/axiosHelper";
 import axios from "axios";
+import { SessionStrategy } from "next-auth";
 
 interface LoginResponse {
   accessToken: string;
@@ -21,7 +22,7 @@ export const authConfig = {
         username: { label: "Username", type: "text", placeholder: "Enter your username" },
         password: { label: "Password", type: "password", placeholder: "Enter your password" },
       },
-      async authorize(credentials: Record<string, string> | undefined) {
+      async authorize(credentials: Record<string, string> | undefined): Promise<any | null> {
         if (!credentials) {
           throw new Error("Credentials are missing");
         }
@@ -60,7 +61,7 @@ export const authConfig = {
     signIn: "/auth/login",
   },
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as SessionStrategy,
     maxAge: 3600,
     updateAge: 60
   },
