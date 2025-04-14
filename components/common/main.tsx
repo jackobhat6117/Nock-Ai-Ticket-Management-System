@@ -36,14 +36,18 @@ export default function MainLayout({ children, pageTitle }: MainLayoutProps) {
   );
 }
 
-const Chatbot = (path:any) => {
+interface ChatbotProps {
+  path: string;
+}
+
+export const Chatbot = ({ path }: ChatbotProps) => {
   const { isChatbotVisible } = useChatbot();
 
   if (!isChatbotVisible) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      <AIAssistancePage path = {path}/>
+      <AIAssistancePage />
     </div>
   );
 };

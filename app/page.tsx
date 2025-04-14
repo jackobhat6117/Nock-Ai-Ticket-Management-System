@@ -1,3 +1,4 @@
+"use client"
 import { AIChat } from "@/components/landingPage/ai-demo"
 
 import { Features } from "@/components/landingPage/features"

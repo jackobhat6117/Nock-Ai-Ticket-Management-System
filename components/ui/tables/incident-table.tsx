@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { format } from 'date-fns';
 import {
   Table,
   TableHeader,
@@ -144,13 +145,8 @@ export function IncidentTable({
   }, [page, filteredItems, rowsPerPage]);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const date = new Date(dateString);
+    return format(date, "MMM d, yyyy hh:mm a"); // Example: Apr 13, 2025 05:32 PM
   };
 
   const renderCell = (incident: Incident, columnKey: React.Key) => {
