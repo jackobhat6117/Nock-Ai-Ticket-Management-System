@@ -19,8 +19,8 @@ interface ApiResponse {
   summary: string;
 }
 
-export default function Page() {  // Changed from AIAssistancePage to Page
-  const pathname = usePathname(); // Get pathname directly in the component
+export default function Page() {  
+  const pathname = usePathname(); 
   const [messages, setMessages] = useState<Message[]>([
     { id: 1, content: "Hello! How can I assist you today?", sender: "ai" },
   ]);
